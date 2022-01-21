@@ -27,10 +27,34 @@ goRightButton.addEventListener('click', (e) => {
 
 const slideVisionMethod = (direction, amount = 250) => {
 
+    let i = 1;
+    let frame = 50
+    let frameRate = 6;
+    let myInterval;
+    const fnLeft = () => {
+        mainContainer.scrollLeft -= amount/frame;
+        console.log(mainContainer.scrollLeft);
+        if (i === frame) {
+            clearInterval(myInterval)
+        }
+        i++;
+    }
+
+    const fnRight = () => {
+        mainContainer.scrollLeft += amount/frame;
+        console.log(mainContainer.scrollLeft);
+        if (i === frame) {
+            clearInterval(myInterval)
+        }
+        i++;
+    }
+
+    clearInterval(myInterval)
     if (direction === 'left') {
-        mainContainer.scrollLeft -= amount
+        myInterval = setInterval(fnLeft, frameRate)
+
     } else if (direction === 'right') {
-        mainContainer.scrollLeft += amount
+        myInterval = setInterval(fnRight, frameRate);
     }
 };
 
