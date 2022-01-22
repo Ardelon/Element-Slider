@@ -26,11 +26,11 @@
     left: 50%;
     transform: translate(-50%, -50%);
     position: absolute;
-    align-items: center;
+    align-items: baseline;
     overflow-y: auto;
     overflow-x: auto;
     display: flex;
-    
+    flex-direction: column;
   
 }
 
@@ -54,3 +54,22 @@
     box-sizing: border-box;
 }
 
+.belt {
+    flex-shrink: 0;
+    position: relative;
+    height: 250px;
+    /* width: 200px; */
+    border: 2px solid black;
+    align-items: center;
+    /* float: left; */
+    box-sizing: border-box;
+    flex-direction: row;
+
+    overflow-y: auto;
+    overflow-x: auto;
+    display: flex;
+}
+
+.belt::-webkit-scrollbar {
+    display: none;
+}

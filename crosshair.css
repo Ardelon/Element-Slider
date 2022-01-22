@@ -1,0 +1,91 @@
+.grid-container {
+    width: 500px;
+    height: 500px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+}
+
+.center-cross-hair-vertical {
+    height: 100px;
+    border: 1px solid red;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+
+}
+
+.center-cross-hair-horizontal {
+    width: 100px;
+    border: 1px solid red;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+}
+
+.vertical-line-1 {
+    height: 500px;
+    border: 2px solid red;
+    left: 26px;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.vertical-line-2 {
+    height: 500px;
+    border: 2px solid red;
+    left: 225px;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.vertical-line-3 {
+    height: 500px;
+    border: 2px solid red;
+    left: 276px;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.vertical-line-4 {
+    height: 500px;
+    border: 2px solid red;
+    left: 475px;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.horizontal-line-1 {
+    width: 500px;
+    border: 2px solid red;
+    top: 25px;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.horizontal-line-2 {
+    width: 500px;
+    border: 2px solid red;
+    top: 223px;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.horizontal-line-3 {
+    width: 500px;
+    border: 2px solid red;
+    top: 275px;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.horizontal-line-4 {
+    width: 500px;
+    border: 2px solid red;
+    top: 473px;
+    position: absolute;
+    box-sizing: border-box;
+}
