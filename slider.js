@@ -8,6 +8,8 @@ const goDownButton = document.getElementById("go-down-button");
 
 const elementArray = [];
 const beltArray = [];
+let selectedBelt = 0;
+
 
 for (i=0; i<31; i++) {
     elementArray.push(`Element ${i}`);
@@ -17,41 +19,31 @@ for (j = 0; j < 31; j++) {
     beltArray.push(`Belt ${j}`);
 }
 
-
-
-goLeftButton.addEventListener('click', (e) => {
-    e.preventDefault();
+const thLeft = _.throttle(function() {
     slideVisionMethod2('left')
-    goLeftButton.removeEventListener('click', (e) => {
-        e.preventDefault()
-    });
-});
+}, 800);
 
-goRightButton.addEventListener('click', (e) => {
-    e.preventDefault();
+const thRight = _.throttle(function() {
     slideVisionMethod2('right')
-    goRightButton.removeEventListener('click', (e) => {
-        e.preventDefault()
-    });
-});
+}, 800);
 
-
-goUpButton.addEventListener('click', (e) => {
-    e.preventDefault();
+const thUp = _.throttle(function() {
     slideVisionMethod2('up')
-    goUpButton.removeEventListener('click', (e) => {
-        e.preventDefault()
-    });
-});
+}, 800);
 
-
-goDownButton.addEventListener('click', (e) => {
-    e.preventDefault();
+const thDown = _.throttle(function() {
     slideVisionMethod2('down')
-    goDownButton.removeEventListener('click', (e) => {
-        e.preventDefault()
-    });
-});
+}, 800);
+
+goLeftButton.addEventListener('click', thLeft)
+
+
+goRightButton.addEventListener('click', thRight);
+
+
+goUpButton.addEventListener('click', thUp)
+
+goDownButton.addEventListener('click',thDown);
 const slideVisionMethod1 = (direction, amount = 250) => {
 
     let i = 1;
@@ -85,23 +77,28 @@ const slideVisionMethod1 = (direction, amount = 250) => {
     }
 };
 
-const slideVisionMethod2 = (direction, amount = 250) => {
+const slideVisionMethod2 = (direction) => {
 
     let frame = 64; 
     let frameRate = 6; // miliseconds
-    let animationDuration = frame * frameRate // miliseconds
     let interval;
     let target;
+    let horizontalAmount;
+    let verticalAmount;
     clearInterval(interval);
     const driver = {
         'left' : () => {
       
             console.log('left');
-            target = Math.max(mainContainer.scrollLeft - amount, 0);
+            const belt = document.getElementById(`selected-belt-${selectedBelt}`)   
+            const firstChild = belt.firstElementChild;
+            const style = window.getComputedStyle(firstChild);
+            horizontalAmount = parseInt(style.marginLeft) + parseInt(style.marginRight) + parseInt(style.width)
+            target = Math.max(belt.scrollLeft - horizontalAmount, 0);
       
             interval = setInterval(() => {
-                mainContainer.scrollLeft = Math.max(mainContainer.scrollLeft - amount/frame, target)
-                if (mainContainer.scrollLeft === target) {
+                belt.scrollLeft = Math.max(belt.scrollLeft - horizontalAmount/frame, target)
+                if (belt.scrollLeft === target) {
                     clearInterval(interval)
                 }
             }, frameRate);
@@ -109,11 +106,15 @@ const slideVisionMethod2 = (direction, amount = 250) => {
         'right' : () => {
 
             console.log('right');
-            target = Math.min(mainContainer.scrollLeft + amount, mainContainer.scrollWidth - mainContainer.clientWidth)
+            const belt = document.getElementById(`selected-belt-${selectedBelt}`);
+            const firstChild = belt.firstElementChild;
+            const style = window.getComputedStyle(firstChild);
+            horizontalAmount = parseInt(style.marginLeft) + parseInt(style.marginRight) + parseInt(style.width)
+            target = Math.min(belt.scrollLeft + horizontalAmount, belt.scrollWidth - belt.clientWidth)
 
             interval = setInterval(() => {
-                mainContainer.scrollLeft = Math.min(mainContainer.scrollLeft + amount/frame, target)
-                if (mainContainer.scrollLeft === target) {
+                belt.scrollLeft = Math.min(belt.scrollLeft + horizontalAmount/frame, target)
+                if (belt.scrollLeft === target) {
                     clearInterval(interval)
                 }
             }, frameRate);
@@ -121,10 +122,14 @@ const slideVisionMethod2 = (direction, amount = 250) => {
         'up' : () => {
 
             console.log('up');
-            target = Math.max(mainContainer.scrollTop - amount, 0);
-
+            selectedBelt = Math.max(selectedBelt - 1, 0);
+            const belt = document.getElementById(`selected-belt-${selectedBelt}`);
+            const style = window.getComputedStyle(belt);
+            verticalAmount = parseInt(style.marginTop) + parseInt(style.marginBottom) + parseInt(style.height)
+            target = Math.max(mainContainer.scrollTop - verticalAmount, 0);
+            
             interval = setInterval(() => {
-                mainContainer.scrollTop = Math.max(mainContainer.scrollTop - amount/frame, target)
+                mainContainer.scrollTop = Math.max(mainContainer.scrollTop - verticalAmount/frame, target)
                 if (mainContainer.scrollTop === target) {
                     clearInterval(interval)
                 }
@@ -133,10 +138,14 @@ const slideVisionMethod2 = (direction, amount = 250) => {
         'down' : () => {
 
             console.log('down');
-            target = Math.min(mainContainer.scrollTop + amount, mainContainer.scrollHeight - mainContainer.clientHeight)
+            selectedBelt = Math.min(selectedBelt + 1, 30);
+            const belt = document.getElementById(`selected-belt-${selectedBelt}`);
+            const style = window.getComputedStyle(belt);
+            verticalAmount = parseInt(style.marginTop) + parseInt(style.marginBottom) + parseInt(style.height)
+            target = Math.min(mainContainer.scrollTop + verticalAmount, mainContainer.scrollHeight - mainContainer.clientHeight)
 
             interval = setInterval(() => {
-                mainContainer.scrollTop = Math.min(mainContainer.scrollTop + amount/frame, target)
+                mainContainer.scrollTop = Math.min(mainContainer.scrollTop + verticalAmount/frame, target)
                 if (mainContainer.scrollTop === target) {
                     clearInterval(interval)
                 }
@@ -153,10 +162,11 @@ const slideVisionMethod2 = (direction, amount = 250) => {
 }
 
 const generateElementsForVisionMethod = () => {
-    beltArray.forEach(beltValue => {
+    beltArray.forEach((beltValue, index) => {
 
         const belt = document.createElement("div");
         belt.classList.add("belt");
+        belt.id = `selected-belt-${index}`
 
         elementArray.forEach(number => {
             const element = document.createElement("div");
